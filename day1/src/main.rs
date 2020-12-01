@@ -17,15 +17,16 @@ fn main() {
         1882, 995, 1704, 1896, 1611, 1888, 1773, 1810, 1650, 1712, 1410, 1796, 1691, 1671, 1947,
         1775, 1593, 656, 1530, 1743,
     ];
-    println!("{:?}", fix_expense_report(expense_report));
+    println!("Group of 2: {:?}", fix_expense_report(&expense_report, 2));
+    println!("Group of 3: {:?}", fix_expense_report(&expense_report, 3));
 }
 
-fn fix_expense_report(expense_report: Vec<u32>) -> Option<u32> {
+fn fix_expense_report(expense_report: &Vec<u32>, group_size: usize) -> Option<u32> {
     expense_report
         .iter()
-        .combinations(2)
-        .find(|x| x[0] + x[1] == 2020)
-        .and_then(|x| Some(x[0] * x[1]))
+        .combinations(group_size)
+        .find(|x| x.iter().copied().sum::<u32>() == 2020)
+        .and_then(|x| Some(x.iter().copied().product()))
 }
 
 #[cfg(test)]
@@ -35,6 +36,12 @@ mod tests {
     #[test]
     fn example() {
         let input = vec![1721, 979, 366, 299, 675, 1456];
-        assert_eq!(fix_expense_report(input), Some(514579));
+        assert_eq!(fix_expense_report(input, 2), Some(514579));
+    }
+
+    #[test]
+    fn part_2_example() {
+        let input = vec![1721, 979, 366, 299, 675, 1456];
+        assert_eq!(fix_expense_report(input, 3), Some(241861950));
     }
 }
